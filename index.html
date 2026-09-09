@@ -408,7 +408,15 @@
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; z-index: 10001; padding: 16px; }
         .view-section { display: none; }
         .view-section.active { display: block; }
-    </style>
+    
+        .claim-btn.checking {
+            opacity: .75;
+            pointer-events: none;
+        }
+        .claim-btn:disabled {
+            cursor: wait;
+        }
+</style>
 </head>
 <body>
 
@@ -1015,7 +1023,11 @@
 
     <script>
         // 🎯 Firebase Realtime Database
-        const FIREBASE_DB_URL = "https://bangla-task-app-default-rtdb.firebaseio.com/";
+        // Telegram membership verification backend.
+// Keep the Bot Token ONLY on the backend, never inside this HTML file.
+const MEMBERSHIP_API_URL = "https://YOUR-WORKER.workers.dev/check-membership";
+
+const FIREBASE_DB_URL = "https://bangla-task-app-default-rtdb.firebaseio.com/";
         const BOT_USERNAME = "bangla_task_app_bot";
         const MIN_PAYOUT = 1020;
 
@@ -1270,26 +1282,67 @@
         }
 
         // 🎯 ধাপ ২: Claim বাটনে ক্লিক করলে কার্ডে লেখা নির্দিষ্ট টাকা ব্যালেন্সে ও ডাটাবেজে যোগ হবে
-        async function handleClaimClick(taskId, rewardAmount) {
-            if (claimedTasksMap[taskId]) return;
+        async function verifyChannelMembership() {
+        if (!MEMBERSHIP_API_URL || MEMBERSHIP_API_URL.includes("YOUR-WORKER")) {
+            throw new Error("Membership API URL is not configured.");
+        }
 
-            // যদি আগে Join না করে থাকে
-            if (!joinedTasksMap[taskId] && !localStorage.getItem(`bth_joined_${currentUserId}_${taskId}`)) {
-                showToast("⚠️ আগে বাঁপাশের 'Join' বাটনে ক্লিক করে চ্যানেলে যুক্ত হোন!");
+        const response = await fetch(MEMBERSHIP_API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                userId: String(currentUserId)
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error("Membership verification request failed.");
+        }
+
+        return await response.json();
+    }
+
+    async function handleClaimClick(taskId, rewardAmount) {
+        if (claimedTasksMap[taskId]) return;
+
+        const btn = document.getElementById(`btnClaim${taskId}`);
+        if (!btn) return;
+
+        const originalHTML = btn.innerHTML;
+        btn.disabled = true;
+        btn.classList.add("checking");
+        btn.innerHTML = 'Checking... <i class="fa-solid fa-spinner fa-spin"></i>';
+
+        try {
+            // Never trust localStorage for membership.
+            // The backend checks the user's real Telegram membership.
+            const result = await verifyChannelMembership();
+
+            if (!result || result.ok !== true) {
+                const missing = Array.isArray(result?.missing) ? result.missing : [];
+
+                if (missing.length) {
+                    showToast("❌ আগে Join করুন: " + missing.join(", "));
+                } else {
+                    showToast("❌ আগে প্রয়োজনীয় Telegram channel-গুলোতে Join করুন!");
+                }
+
+                btn.disabled = false;
+                btn.classList.remove("checking");
+                btn.innerHTML = originalHTML;
                 return;
             }
 
+            // Existing reward logic remains unchanged after successful verification.
             balance += rewardAmount;
             totalEarned += rewardAmount;
             tasksDone += 1;
             claimedTasksMap[taskId] = true;
 
-            const btn = document.getElementById(`btnClaim${taskId}`);
-            btn.classList.remove('ready');
-            btn.classList.add('claimed');
+            btn.classList.remove("ready", "checking");
+            btn.classList.add("claimed");
             btn.innerHTML = 'Claimed <i class="fa-solid fa-check"></i>';
 
-            // Firebase Update
             fetch(`${FIREBASE_DB_URL}users/${currentUserId}.json`, {
                 method: 'PATCH',
                 body: JSON.stringify({
@@ -1302,7 +1355,16 @@
 
             showToast(`🎉 ৳ ${rewardAmount.toFixed(2)} ব্যালেন্সে যোগ হয়েছে!`);
             updateAppUI();
+
+        } catch (error) {
+            console.error("Membership verification error:", error);
+            showToast("⚠️ Membership check করা যাচ্ছে না। একটু পরে আবার চেষ্টা করুন!");
+
+            btn.disabled = false;
+            btn.classList.remove("checking");
+            btn.innerHTML = originalHTML;
         }
+    }
 
         function copyRefLink() {
             const link = document.getElementById('referralLinkText').innerText;
