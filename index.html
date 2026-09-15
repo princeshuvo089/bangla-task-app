@@ -144,7 +144,7 @@
             font-size: 15px;
             font-weight: 800;
             color: var(--text-main);
-            margin: 10px 0 12px;
+            margin: 14px 0 10px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -176,7 +176,6 @@
             flex-shrink: 0;
         }
 
-        /* Task Action Buttons */
         .task-actions-wrap {
             display: flex;
             align-items: center;
@@ -186,6 +185,19 @@
 
         .task-btn-join-small {
             background: #2563eb;
+            color: #fff;
+            padding: 7px 11px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .task-btn-visit-extra {
+            background: #ea580c;
             color: #fff;
             padding: 7px 11px;
             border-radius: 16px;
@@ -289,7 +301,6 @@
         .leaderboard-row.top-2 { background: #f8fafc; border-color: #e2e8f0; }
         .leaderboard-row.top-3 { background: #fff7ed; border-color: #ffedd5; }
 
-        /* User Referral Item */
         .referral-user-card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -301,7 +312,6 @@
             border: 1px solid var(--border-color);
         }
 
-        /* Payment Selector */
         .payment-method-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0 16px; }
         
         .method-card {
@@ -344,7 +354,6 @@
             font-weight: 600;
         }
 
-        /* Requirement Status Box in Withdraw */
         .req-card {
             background: #fdf2f8;
             border: 1px dashed #f472b6;
@@ -362,14 +371,11 @@
             font-weight: 700;
         }
 
-        /* Rules Subview */
         .rules-subview { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f8f9fe; z-index: 9999; display: none; overflow-y: auto; padding: 16px; }
         .rules-subview.active { display: block; }
         .rule-card-green { background: #fff; border: 1px solid #bbf7d0; border-radius: 20px; padding: 18px; margin-bottom: 14px; }
         .rule-card-red { background: #fff; border: 1px solid #fecaca; border-radius: 20px; padding: 18px; margin-bottom: 14px; }
-        .rule-card-alert { background: #fef2f2; border: 1px solid #fee2e2; border-radius: 20px; padding: 18px; color: #991b1b; font-size: 12px; line-height: 1.6; }
 
-        /* Bottom Nav */
         .bottom-nav-bar {
             position: fixed;
             bottom: 0;
@@ -698,7 +704,7 @@
             </div>
         </div>
 
-        <!-- ==================== TAB 2: EARN ==================== -->
+        <!-- ==================== TAB 2: EARN (টেলিগ্রাম ও এক্সট্রা টাস্ক আলাদা সেকশন) ==================== -->
         <div id="view-earn" class="view-section">
             <div class="top-hero-banner" style="padding-bottom: 24px;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-end;">
@@ -714,15 +720,29 @@
             </div>
 
             <div class="content-body">
+                
+                <!-- 📢 সেকশন ১: টেলিগ্রাম চ্যানেল জয়েন টাস্ক -->
                 <div class="section-title">
-                    <i class="fa-regular fa-circle-check" style="color:var(--primary-purple);"></i> Active Tasks
+                    <i class="fa-brands fa-telegram" style="color:#0284c7; font-size:18px;"></i> 
+                    <span>টেলিগ্রাম চ্যানেল টাস্ক</span>
+                    <span id="tgTasksCountBadge" style="font-size:11px; font-weight:800; background:#e0f2fe; color:#0284c7; padding:2px 8px; border-radius:12px; margin-left:auto;">0 টি</span>
                 </div>
-
-                <div id="dynamicTasksListContainer">
-                    <div style="text-align: center; padding: 24px; color: var(--text-muted);">
-                        <i class="fa-solid fa-spinner fa-spin"></i> লোড হচ্ছে...
+                <div id="telegramTasksContainer">
+                    <div style="text-align:center; padding:18px; color:var(--text-muted); font-size:13px;">
+                        <i class="fa-solid fa-spinner fa-spin"></i> চ্যানেল লোড হচ্ছে...
                     </div>
                 </div>
+
+                <!-- 🌐 সেকশন ২: নিচে আলাদা এক্সট্রা ওয়েবসাইট / অ্যাপ টাস্ক -->
+                <div class="section-title" style="margin-top: 24px; padding-top: 14px; border-top: 1px dashed #cbd5e1;">
+                    <i class="fa-solid fa-rocket" style="color:#f97316; font-size:17px;"></i> 
+                    <span>এক্সট্রা ওয়েবসাইট ও অ্যাপ টাস্ক</span>
+                    <span id="extraTasksCountBadge" style="font-size:11px; font-weight:800; background:#ffedd5; color:#ea580c; padding:2px 8px; border-radius:12px; margin-left:auto;">0 টি</span>
+                </div>
+                <div id="extraTasksContainer">
+                    <!-- JS দিয়ে লোড হবে -->
+                </div>
+
             </div>
         </div>
 
@@ -808,7 +828,7 @@
             </div>
         </div>
 
-        <!-- ==================== TAB 4: WITHDRAW (আপডেটেড শর্তাবলী সহ) ==================== -->
+        <!-- ==================== TAB 4: WITHDRAW ==================== -->
         <div id="view-withdraw" class="view-section">
             <div class="top-hero-banner">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -825,7 +845,6 @@
 
             <div class="content-body">
                 
-                <!-- 🎯 উইথড্রল শর্ত প্রগ্রেস কার্ড -->
                 <div class="req-card">
                     <div style="font-weight: 800; color: #9d174d; display: flex; align-items: center; gap: 6px;">
                         <i class="fa-solid fa-shield-halved"></i> উইথড্রল যোগ্যতার শর্তসমূহ:
@@ -1017,7 +1036,6 @@
         const FIREBASE_DB_URL = "https://bangla-task-app-default-rtdb.firebaseio.com/";
         const BOT_USERNAME = "bangla_task_app_bot";
         
-        // 🔒 উইথড্রল রুলস
         const MIN_PAYOUT = 1020;
         const MIN_REQUIRED_REFERRALS = 20;
 
@@ -1156,7 +1174,7 @@
             updateAppUI();
         });
 
-        // ==================== TASK LOGIC ====================
+        // ==================== TASK LOGIC (টেলিগ্রাম ও এক্সট্রা আলাদা সেকশনে রেন্ডার) ====================
         async function syncAndRenderTasks() {
             try {
                 const res = await fetch(`${FIREBASE_DB_URL}tasks.json`);
@@ -1179,62 +1197,105 @@
         }
 
         function renderTasksInEarnTab() {
-            const container = document.getElementById('dynamicTasksListContainer');
+            const tgContainer = document.getElementById('telegramTasksContainer');
+            const extraContainer = document.getElementById('extraTasksContainer');
             const taskKeys = Object.keys(allTasksMap);
 
             document.getElementById('earnTabTotalTasksBadge').innerText = `${taskKeys.length} Tasks`;
 
-            if (taskKeys.length === 0) {
-                container.innerHTML = `
-                    <div class="card" style="text-align: center; padding: 30px; color: var(--text-muted);">
-                        <i class="fa-solid fa-list-check" style="font-size: 26px; margin-bottom: 8px;"></i>
-                        <p>বর্তমানে কোনো টাস্ক নেই। নতুন টাস্কের জন্য অপেক্ষা করুন।</p>
+            const tgKeys = taskKeys.filter(k => (allTasksMap[k].type || 'telegram') === 'telegram');
+            const extraKeys = taskKeys.filter(k => allTasksMap[k].type === 'website');
+
+            // ব্যাজ আপডেট
+            document.getElementById('tgTasksCountBadge').innerText = `${tgKeys.length} টি`;
+            document.getElementById('extraTasksCountBadge').innerText = `${extraKeys.length} টি`;
+
+            // ১. টেলিগ্রাম চ্যানেল টাস্ক রেন্ডার
+            if (tgKeys.length === 0) {
+                tgContainer.innerHTML = `
+                    <div class="card" style="text-align:center; padding:18px; color:var(--text-muted); font-size:12px;">
+                        কোনো টেলিগ্রাম টাস্ক সক্রিয় নেই।
                     </div>
                 `;
-                updateAppUI();
-                return;
-            }
-
-            let html = '';
-            taskKeys.forEach(tId => {
-                const task = allTasksMap[tId];
-                const isClaimed = claimedTasksMap[tId] ? true : false;
-                const isTg = task.type === 'telegram';
-
-                const iconBg = isTg ? '#e0f2fe' : '#fef3c7';
-                const iconColor = isTg ? '#0284c7' : '#d97706';
-                const iconClass = isTg ? 'fa-brands fa-telegram' : 'fa-solid fa-globe';
-                const subDesc = isTg ? (task.username || 'Join Telegram Channel') : (task.condition || 'Visit Website & Earn');
-                const tag = isTg ? 'TELEGRAM' : 'WEBSITE';
-
-                html += `
-                    <div class="task-list-item">
-                        <div class="task-item-left">
-                            <div class="task-icon" style="background:${iconBg}; color:${iconColor};">
-                                <i class="${iconClass}"></i>
-                            </div>
-                            <div>
-                                <div style="font-size:13px; font-weight:800;">${task.name}</div>
-                                <div style="font-size:11px; color:var(--text-muted); margin:2px 0 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px;">${subDesc}</div>
-                                <div style="display:flex; gap:5px;">
-                                    <span style="background:#db2777; color:#fff; font-size:10px; font-weight:800; padding:2px 7px; border-radius:12px;">+৳ ${Number(task.reward).toFixed(2)}</span>
-                                    <span style="background:#f1f5f9; color:var(--text-muted); font-size:10px; font-weight:700; padding:2px 7px; border-radius:12px;">${tag}</span>
+            } else {
+                let tgHtml = '';
+                tgKeys.forEach(tId => {
+                    const task = allTasksMap[tId];
+                    const isClaimed = claimedTasksMap[tId] ? true : false;
+                    tgHtml += `
+                        <div class="task-list-item">
+                            <div class="task-item-left">
+                                <div class="task-icon" style="background:#e0f2fe; color:#0284c7;">
+                                    <i class="fa-brands fa-telegram"></i>
+                                </div>
+                                <div>
+                                    <div style="font-size:13px; font-weight:800;">${task.name}</div>
+                                    <div style="font-size:11px; color:var(--text-muted); margin:2px 0 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px;">${task.username || 'Join Telegram Channel'}</div>
+                                    <div style="display:flex; gap:5px;">
+                                        <span style="background:#db2777; color:#fff; font-size:10px; font-weight:800; padding:2px 7px; border-radius:12px;">+৳ ${Number(task.reward).toFixed(2)}</span>
+                                        <span style="background:#f1f5f9; color:var(--text-muted); font-size:10px; font-weight:700; padding:2px 7px; border-radius:12px;">TELEGRAM</span>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="task-actions-wrap">
+                                <a href="${task.link}" target="_blank" class="task-btn-join-small" onclick="recordTaskVisit('${tId}')">
+                                    Join <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:9px;"></i>
+                                </a>
+                                <button class="task-btn-claim ${isClaimed ? 'claimed' : ''}" id="btnClaim_${tId}" onclick="verifyAndClaimTask('${tId}')">
+                                    ${isClaimed ? 'Claimed <i class="fa-solid fa-check"></i>' : 'Claim'}
+                                </button>
+                            </div>
                         </div>
-                        <div class="task-actions-wrap">
-                            <a href="${task.link}" target="_blank" class="task-btn-join-small" onclick="recordTaskVisit('${tId}')">
-                                ${isTg ? 'Join' : 'Visit'} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:9px;"></i>
-                            </a>
-                            <button class="task-btn-claim ${isClaimed ? 'claimed' : ''}" id="btnClaim_${tId}" onclick="verifyAndClaimTask('${tId}')">
-                                ${isClaimed ? 'Claimed <i class="fa-solid fa-check"></i>' : 'Claim'}
-                            </button>
-                        </div>
+                    `;
+                });
+                tgContainer.innerHTML = tgHtml;
+            }
+
+            // ২. নিচে আলাদা এক্সট্রা ওয়েবসাইট / অ্যাপ টাস্ক রেন্ডার
+            if (extraKeys.length === 0) {
+                extraContainer.innerHTML = `
+                    <div class="card" style="text-align:center; padding:24px 16px; color:var(--text-muted); font-size:12px; background:#fffcf9; border: 1px dashed #fdba74;">
+                        <i class="fa-solid fa-clock-rotate-left" style="font-size: 20px; color:#ea580c; margin-bottom:6px;"></i>
+                        <p style="font-weight:700; color:var(--text-main);">বর্তমানে কোনো এক্সট্রা টাস্ক নেই</p>
+                        <p style="margin-top:2px;">নতুন ওয়েবসাইট বা অ্যাপ টাস্ক আসলে এই সেকশনে লাইভ দেখতে পাবেন।</p>
                     </div>
                 `;
-            });
+            } else {
+                let extraHtml = '';
+                extraKeys.forEach(tId => {
+                    const task = allTasksMap[tId];
+                    const isClaimed = claimedTasksMap[tId] ? true : false;
+                    extraHtml += `
+                        <div class="task-list-item" style="border-left: 3px solid #f97316;">
+                            <div class="task-item-left">
+                                <div class="task-icon" style="background:#ffedd5; color:#ea580c;">
+                                    <i class="fa-solid fa-globe"></i>
+                                </div>
+                                <div>
+                                    <div style="font-size:13px; font-weight:800; color:var(--text-main);">${task.name}</div>
+                                    <div style="font-size:11px; color:#b45309; margin:2px 0 4px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px;">
+                                        <i class="fa-solid fa-circle-info" style="font-size:10px;"></i> ${task.condition || 'ভিজিট করে টাস্ক সম্পন্ন করুন'}
+                                    </div>
+                                    <div style="display:flex; gap:5px;">
+                                        <span style="background:#ea580c; color:#fff; font-size:10px; font-weight:800; padding:2px 7px; border-radius:12px;">+৳ ${Number(task.reward).toFixed(2)}</span>
+                                        <span style="background:#fef3c7; color:#b45309; font-size:10px; font-weight:800; padding:2px 7px; border-radius:12px;">EXTRA TASK</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="task-actions-wrap">
+                                <a href="${task.link}" target="_blank" class="task-btn-visit-extra" onclick="recordTaskVisit('${tId}')">
+                                    Visit <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:9px;"></i>
+                                </a>
+                                <button class="task-btn-claim ${isClaimed ? 'claimed' : ''}" id="btnClaim_${tId}" onclick="verifyAndClaimTask('${tId}')">
+                                    ${isClaimed ? 'Claimed <i class="fa-solid fa-check"></i>' : 'Claim'}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                extraContainer.innerHTML = extraHtml;
+            }
 
-            container.innerHTML = html;
             updateAppUI();
         }
 
@@ -1287,7 +1348,7 @@
                 if (!visitedTasksMap[taskId]) {
                     btn.innerHTML = 'Claim';
                     btn.disabled = false;
-                    showToast("❌ আগে 'Visit' বাটনে ক্লিক করে ওয়েবসাইটটি ভিজিট করুন!");
+                    showToast("❌ আগে 'Visit' বাটনে ক্লিক করে ওয়েবসাইট/অ্যাপটি ভিজিট করুন!");
                     return;
                 }
                 grantTaskReward(taskId, reward);
@@ -1372,7 +1433,6 @@
             document.getElementById('referTabCount').innerText = totalReferrals;
             document.getElementById('referTabEarned').innerText = (totalReferrals * 50.00).toFixed(2);
 
-            // উইথড্রল শর্ত প্রগ্রেস স্ট্যাটাস আপডেট
             const balStatusEl = document.getElementById('withdrawReqBalStatus');
             if (balance >= MIN_PAYOUT) {
                 balStatusEl.innerHTML = '<span style="color:var(--accent-green);"><i class="fa-solid fa-check"></i> সম্পূর্ণ হয়েছে</span>';
@@ -1446,9 +1506,6 @@
             document.getElementById('btnMethodNagad').className = `method-card ${method === 'nagad' ? 'selected-nagad' : ''}`;
         }
 
-        // =========================================================================
-        // 🔒 আপডেটেড উইথড্রল রিকোয়েস্ট (ডাটাবেস ভেরিফিকেশন ও শর্তাবলী নোটিশ)
-        // =========================================================================
         async function handlePayoutRequest() {
             const accountNo = document.getElementById('payoutAccountNo').value.trim();
             const amount = parseFloat(document.getElementById('payoutAmountInput').value);
@@ -1463,12 +1520,10 @@
                 return;
             }
 
-            // বাটন লোডিং স্টেট
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ডাটাবেস যাচাই করা হচ্ছে...';
             btn.disabled = true;
 
             try {
-                // 🔍 সরাসরি ফায়ারবেস ডাটাবেস থেকে রিয়েল-টাইম তথ্য যাচাই
                 const userRes = await fetch(`${FIREBASE_DB_URL}users/${currentUserId}.json`);
                 const dbUserData = await userRes.json();
 
@@ -1482,11 +1537,9 @@
                 const dbBalance = parseFloat(dbUserData.balance || 0);
                 const dbReferrals = parseInt(dbUserData.referrals || 0);
 
-                // শর্ত অপূর্ণতা গণনা
                 const isBalanceLow = dbBalance < amount;
                 const isReferralsLow = dbReferrals < MIN_REQUIRED_REFERRALS;
 
-                // ❌ কোনো শর্ত অপূর্ণ থাকলে বিস্তারিত নোটিশ অ্যালার্ট
                 if (isBalanceLow || isReferralsLow) {
                     let alertMsg = "⚠️ উইথড্র শর্ত অপূর্ণ রয়েছে!\n\nউইথড্র করার জন্য আপনার প্রয়োজন:\n";
                     
@@ -1512,20 +1565,14 @@
                     return;
                 }
 
-                // ✅ সকল শর্ত পূরণ হয়েছে! উইথড্র প্রসেস সম্পন্ন করা
                 const newBal = dbBalance - amount;
                 const newWithdrawn = (dbUserData.totalWithdrawn || 0) + amount;
 
-                // ১. ইউজারের ব্যালেন্স কাটা
                 await fetch(`${FIREBASE_DB_URL}users/${currentUserId}.json`, {
                     method: 'PATCH',
-                    body: JSON.stringify({ 
-                        balance: newBal, 
-                        totalWithdrawn: newWithdrawn 
-                    })
+                    body: JSON.stringify({ balance: newBal, totalWithdrawn: newWithdrawn })
                 });
 
-                // ২. উইথড্রল হিস্ট্রি রিকোয়েস্টে জমা
                 await fetch(`${FIREBASE_DB_URL}withdrawals.json`, {
                     method: 'POST',
                     body: JSON.stringify({
@@ -1538,7 +1585,6 @@
                     })
                 });
 
-                // লোকাল ভেরিয়েবল আপডেট
                 balance = newBal;
                 totalWithdrawn = newWithdrawn;
                 totalReferrals = dbReferrals;
@@ -1562,9 +1608,7 @@
             btn.disabled = false;
         }
 
-        // =========================================================================
-        // 🛡️ SUPER ADMIN PANEL LOGIC
-        // =========================================================================
+        // ==================== SUPER ADMIN PANEL ====================
         function openAdminModal() {
             document.getElementById('adminModal').style.display = 'flex';
             document.getElementById('adminAuth').style.display = 'block';
@@ -1786,7 +1830,7 @@
             let html = '';
             taskKeys.forEach(tId => {
                 const t = allTasksMap[tId];
-                const isTg = t.type === 'telegram';
+                const isTg = (t.type || 'telegram') === 'telegram';
                 html += `
                     <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border:1px solid #e2e8f0; padding:8px 12px; border-radius:12px; margin-bottom:6px;">
                         <div style="font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:240px;">
