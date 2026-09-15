@@ -505,14 +505,12 @@
                 <span onclick="closeAdminModal()" style="cursor: pointer; font-size: 22px; color: var(--text-muted);">&times;</span>
             </div>
             
-            <!-- লগইন ফর্ম -->
             <div id="adminAuth" style="padding: 10px 0; text-align: center;">
                 <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">অ্যাডমিন পাসওয়ার্ড প্রবেশ করান</div>
                 <input type="password" id="adminSecretInput" class="input-field" placeholder="পাসওয়ার্ড লিখুন..." style="margin-bottom: 12px; text-align: center; font-size: 16px;">
                 <button class="btn-action-primary" onclick="verifyAdminAuth()">লগইন করুন</button>
             </div>
 
-            <!-- অ্যাডমিন কন্ট্রোল এরিয়া -->
             <div id="adminControls" style="display: none;">
                 
                 <div class="admin-tabs">
@@ -524,7 +522,6 @@
                     </button>
                 </div>
 
-                <!-- 💰 ট্যাব ১: ব্যালেন্স ও রেফার নিয়ন্ত্রণ -->
                 <div id="adminSubTab1">
                     <div style="margin-bottom: 12px;">
                         <label style="font-size: 11px; font-weight: 800; color: var(--text-muted); display: flex; justify-content: space-between; margin-bottom: 4px;">
@@ -563,7 +560,6 @@
                     </div>
                 </div>
 
-                <!-- 📢 ও 🌐 ট্যাব ২: টাস্ক পাবলিশার ও ডিলিট -->
                 <div id="adminSubTab2" style="display: none;">
                     <div class="card" style="background: #fdf4ff; border: 1px solid #f0abfc; padding: 12px; margin-bottom: 12px;">
                         <label style="font-size: 12px; font-weight: 800; color: #86198f; display: block; margin-bottom: 4px;">ক্যাটাগরি নির্বাচন করুন:</label>
@@ -704,7 +700,7 @@
             </div>
         </div>
 
-        <!-- ==================== TAB 2: EARN (টেলিগ্রাম ও এক্সট্রা টাস্ক আলাদা সেকশন) ==================== -->
+        <!-- ==================== TAB 2: EARN ==================== -->
         <div id="view-earn" class="view-section">
             <div class="top-hero-banner" style="padding-bottom: 24px;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-end;">
@@ -739,9 +735,7 @@
                     <span>এক্সট্রা ওয়েবসাইট ও অ্যাপ টাস্ক</span>
                     <span id="extraTasksCountBadge" style="font-size:11px; font-weight:800; background:#ffedd5; color:#ea580c; padding:2px 8px; border-radius:12px; margin-left:auto;">0 টি</span>
                 </div>
-                <div id="extraTasksContainer">
-                    <!-- JS দিয়ে লোড হবে -->
-                </div>
+                <div id="extraTasksContainer"></div>
 
             </div>
         </div>
@@ -964,7 +958,6 @@
                     </div>
                 </div>
 
-                <!-- Admin Panel Trigger -->
                 <div style="text-align: left; padding: 2px 6px;">
                     <div class="admin-trigger" onclick="openAdminModal()">
                         <i class="fa-solid fa-shield-halved" style="font-size: 12px; color: var(--primary-purple);"></i> Admin Panel
@@ -1050,6 +1043,9 @@
         let claimedTasksMap = {};
         let myReferralsData = {};
         let allTasksMap = {};
+        
+        // 🔒 পুরাতন ইউজার ফ্ল্যাগ (Old Bot User Tracking)
+        let isOldBotUser = false;
 
         const DEFAULT_SEED_TASKS = {
             "task_1": { type: "telegram", name: "Prince Earning Zone", link: "https://t.me/PrinceEarningZone", username: "@PrinceEarningZone", reward: 50.00, tag: "JOIN BONUS" },
@@ -1098,12 +1094,13 @@
 
             document.getElementById('referralLinkText').innerText = `https://t.me/${BOT_USERNAME}?startapp=${currentUserId}`;
 
-            // Firebase User Sync
+            // 🚀 Firebase User Sync & Old User Detection
             try {
                 const userRes = await fetch(`${FIREBASE_DB_URL}users/${currentUserId}.json`);
                 let userData = await userRes.json();
 
                 if (!userData) {
+                    // 🌟 নতুন ব্যবহারকারী (New User) - এরা ক্লেইম করার সুযোগ পাবে
                     userData = {
                         id: currentUserId,
                         name: firstName,
@@ -1114,6 +1111,7 @@
                         tasksDone: 0,
                         totalWithdrawn: 0.00,
                         claimedTasks: {},
+                        isNewUser: true, // নতুন ইউজার চিহ্নিতকরণ
                         createdAt: new Date().toISOString()
                     };
 
@@ -1154,6 +1152,15 @@
                         method: 'PUT',
                         body: JSON.stringify(userData)
                     });
+
+                    isOldBotUser = false;
+
+                } else {
+                    // ⚠️ আগে থেকেই ডাটাবেসে থাকা ইউজার (Existing User)
+                    // যদি ইউজার নতুন না হয়, তবে সে পূর্বে থেকেই বটের ইউজার হিসেবে গণ্য হবে
+                    if (!userData.isNewUser) {
+                        isOldBotUser = true;
+                    }
                 }
 
                 balance = userData.balance || 0.00;
@@ -1174,7 +1181,7 @@
             updateAppUI();
         });
 
-        // ==================== TASK LOGIC (টেলিগ্রাম ও এক্সট্রা আলাদা সেকশনে রেন্ডার) ====================
+        // ==================== TASK LOGIC ====================
         async function syncAndRenderTasks() {
             try {
                 const res = await fetch(`${FIREBASE_DB_URL}tasks.json`);
@@ -1189,6 +1196,29 @@
                 }
 
                 allTasksMap = data || {};
+
+                // 🔒 পুরাতন ইউজারদের জন্য স্বয়ংক্রিয়ভাবে চ্যানেলের টাস্কসমূহ Claimed করে দেওয়া
+                if (isOldBotUser) {
+                    let shouldPatch = false;
+                    Object.keys(allTasksMap).forEach(tId => {
+                        const t = allTasksMap[tId];
+                        if ((t.type || 'telegram') === 'telegram') {
+                            if (!claimedTasksMap[tId]) {
+                                claimedTasksMap[tId] = true;
+                                shouldPatch = true;
+                            }
+                        }
+                    });
+
+                    // ডাটাবেসে সেভ যাতে স্থায়ীভাবে Claimed থাকে
+                    if (shouldPatch) {
+                        fetch(`${FIREBASE_DB_URL}users/${currentUserId}/claimedTasks.json`, {
+                            method: 'PATCH',
+                            body: JSON.stringify(claimedTasksMap)
+                        }).catch(e => console.log(e));
+                    }
+                }
+
                 renderTasksInEarnTab();
                 renderAdminTaskList();
             } catch (err) {
@@ -1206,11 +1236,10 @@
             const tgKeys = taskKeys.filter(k => (allTasksMap[k].type || 'telegram') === 'telegram');
             const extraKeys = taskKeys.filter(k => allTasksMap[k].type === 'website');
 
-            // ব্যাজ আপডেট
             document.getElementById('tgTasksCountBadge').innerText = `${tgKeys.length} টি`;
             document.getElementById('extraTasksCountBadge').innerText = `${extraKeys.length} টি`;
 
-            // ১. টেলিগ্রাম চ্যানেল টাস্ক রেন্ডার
+            // ১. টেলিগ্রাম চ্যানেল জয়েন টাস্ক রেন্ডার
             if (tgKeys.length === 0) {
                 tgContainer.innerHTML = `
                     <div class="card" style="text-align:center; padding:18px; color:var(--text-muted); font-size:12px;">
@@ -1221,7 +1250,9 @@
                 let tgHtml = '';
                 tgKeys.forEach(tId => {
                     const task = allTasksMap[tId];
-                    const isClaimed = claimedTasksMap[tId] ? true : false;
+                    // যদি আগে থেকেই ক্লেইম করা থাকে বা পুরাতন ইউজার হয় তাহলে claimed দেখাবে
+                    const isClaimed = (claimedTasksMap[tId] || isOldBotUser) ? true : false;
+                    
                     tgHtml += `
                         <div class="task-list-item">
                             <div class="task-item-left">
@@ -1251,7 +1282,7 @@
                 tgContainer.innerHTML = tgHtml;
             }
 
-            // ২. নিচে আলাদা এক্সট্রা ওয়েবসাইট / অ্যাপ টাস্ক রেন্ডার
+            // ২. এক্সট্রা ওয়েবসাইট / অ্যাপ টাস্ক রেন্ডার
             if (extraKeys.length === 0) {
                 extraContainer.innerHTML = `
                     <div class="card" style="text-align:center; padding:24px 16px; color:var(--text-muted); font-size:12px; background:#fffcf9; border: 1px dashed #fdba74;">
@@ -1305,10 +1336,19 @@
         }
 
         async function verifyAndClaimTask(taskId) {
-            if (claimedTasksMap[taskId]) return;
-
             const task = allTasksMap[taskId];
             if (!task) return;
+
+            // 🔒 পুরাতন ইউজার হলে টেলিগ্রাম টাস্ক সম্পূর্ণ ব্লক
+            if (isOldBotUser && (task.type || 'telegram') === 'telegram') {
+                showToast("⚠️ আপনি আগের ইউজার হওয়ায় এই চ্যানেলের বোনাস ক্লেইম করা সম্ভব নয়!");
+                return;
+            }
+
+            if (claimedTasksMap[taskId]) {
+                showToast("⚠️ আপনি ইতিমধ্যে এই টাস্কটি ক্লেইম করেছেন!");
+                return;
+            }
 
             const btn = document.getElementById(`btnClaim_${taskId}`);
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
