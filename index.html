@@ -301,7 +301,7 @@
             border: 1px solid var(--border-color);
         }
 
-        /* Payment Selector with Logo Images */
+        /* Payment Selector */
         .payment-method-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0 16px; }
         
         .method-card {
@@ -342,6 +342,24 @@
             color: var(--text-main);
             margin-bottom: 10px;
             font-weight: 600;
+        }
+
+        /* Requirement Status Box in Withdraw */
+        .req-card {
+            background: #fdf2f8;
+            border: 1px dashed #f472b6;
+            border-radius: 16px;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+            font-size: 12px;
+        }
+
+        .req-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 6px;
+            font-weight: 700;
         }
 
         /* Rules Subview */
@@ -404,7 +422,6 @@
         .view-section { display: none; }
         .view-section.active { display: block; }
 
-        /* Admin UI Special Styles */
         .admin-modal-card {
             max-width: 440px;
             width: 100%;
@@ -471,11 +488,10 @@
 
     <div class="toast-msg" id="toast">মেসেজ</div>
 
-    <!-- ==================== UPGRADED ADMIN PANEL MODAL ==================== -->
+    <!-- ==================== ADMIN PANEL MODAL ==================== -->
     <div id="adminModal" class="modal-overlay" style="display: none;">
         <div class="admin-modal-card">
             
-            <!-- Modal Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0;">
                 <h4 style="font-size: 15px; font-weight: 800; color: var(--primary-purple); display: flex; align-items: center; gap: 6px;">
                     <i class="fa-solid fa-shield-halved"></i> সুপার অ্যাডমিন প্যানেল
@@ -483,7 +499,7 @@
                 <span onclick="closeAdminModal()" style="cursor: pointer; font-size: 22px; color: var(--text-muted);">&times;</span>
             </div>
             
-            <!-- 🔑 ১. লগইন ফর্ম -->
+            <!-- লগইন ফর্ম -->
             <div id="adminAuth" style="padding: 10px 0; text-align: center;">
                 <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">অ্যাডমিন পাসওয়ার্ড প্রবেশ করান</div>
                 <input type="password" id="adminSecretInput" class="input-field" placeholder="পাসওয়ার্ড লিখুন..." style="margin-bottom: 12px; text-align: center; font-size: 16px;">
@@ -493,7 +509,6 @@
             <!-- অ্যাডমিন কন্ট্রোল এরিয়া -->
             <div id="adminControls" style="display: none;">
                 
-                <!-- অ্যাডমিন ট্যাব সুইচার -->
                 <div class="admin-tabs">
                     <button class="admin-tab-btn active" id="btnAdminTab1" onclick="switchAdminSubTab(1)">
                         <i class="fa-solid fa-wallet"></i> ১. ব্যালেন্স ও রেফার
@@ -505,8 +520,6 @@
 
                 <!-- 💰 ট্যাব ১: ব্যালেন্স ও রেফার নিয়ন্ত্রণ -->
                 <div id="adminSubTab1">
-                    
-                    <!-- টার্গেট ইউজার আইডি -->
                     <div style="margin-bottom: 12px;">
                         <label style="font-size: 11px; font-weight: 800; color: var(--text-muted); display: flex; justify-content: space-between; margin-bottom: 4px;">
                             <span>টার্গেট টেলিগ্রাম ইউজার ID:</span>
@@ -515,7 +528,6 @@
                         <input type="text" id="adminTargetUser" class="input-field" placeholder="যেমন: 8410886864">
                     </div>
 
-                    <!-- ব্যালেন্স নিয়ন্ত্রণ -->
                     <div class="card" style="background: #f8fafc; padding: 12px; margin-bottom: 12px;">
                         <label style="font-size: 12px; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 4px;">টাকা ব্যালেন্স নিয়ন্ত্রণ (৳):</label>
                         <input type="number" id="adminBalanceInput" class="input-field" placeholder="যেমন: 500 অথবা -100">
@@ -530,7 +542,6 @@
                         </div>
                     </div>
 
-                    <!-- রেফারেল নিয়ন্ত্রণ -->
                     <div class="card" style="background: #f8fafc; padding: 12px; margin-bottom: 8px;">
                         <label style="font-size: 12px; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 4px;">রেফারেল সংখ্যা নিয়ন্ত্রণ:</label>
                         <input type="number" id="adminRefsInput" class="input-field" placeholder="যেমন: 10 অথবা -2">
@@ -544,12 +555,10 @@
                             </button>
                         </div>
                     </div>
-
                 </div>
 
                 <!-- 📢 ও 🌐 ট্যাব ২: টাস্ক পাবলিশার ও ডিলিট -->
                 <div id="adminSubTab2" style="display: none;">
-                    
                     <div class="card" style="background: #fdf4ff; border: 1px solid #f0abfc; padding: 12px; margin-bottom: 12px;">
                         <label style="font-size: 12px; font-weight: 800; color: #86198f; display: block; margin-bottom: 4px;">ক্যাটাগরি নির্বাচন করুন:</label>
                         <select id="taskCategorySelect" class="input-field" onchange="toggleTaskFormCategory()" style="background:#fff; font-weight:700;">
@@ -563,13 +572,11 @@
                         <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; display: block;">লিংক (URL):</label>
                         <input type="text" id="taskLinkInput" class="input-field" placeholder="https://t.me/... বা https://...">
 
-                        <!-- শুধুমাত্র টেলিগ্রাম টাস্কের জন্য -->
                         <div id="wrapTelegramField">
                             <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; display: block;">চ্যানেল @username (যাচাইয়ের জন্য):</label>
                             <input type="text" id="taskUsernameInput" class="input-field" placeholder="@YourChannelName">
                         </div>
 
-                        <!-- শুধুমাত্র ওয়েবসাইট / অ্যাপ টাস্কের শর্তের জন্য -->
                         <div id="wrapWebsiteField" style="display: none;">
                             <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; display: block;">কাজের শর্ত / নিয়মাবলী:</label>
                             <input type="text" id="taskConditionInput" class="input-field" placeholder="যেমন: সাইটে ১ মিনিট ভিজিট করে একাউন্ট খুলুন">
@@ -583,16 +590,12 @@
                         </button>
                     </div>
 
-                    <!-- লাইভ টাস্ক তালিকা ও ডিলিট অপশন -->
                     <div style="font-size: 13px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
                         <span>📋 সক্রিয় টাস্ক তালিকা</span>
                         <span id="adminTasksCountBadge" style="font-size: 11px; background: #e2e8f0; padding: 2px 8px; border-radius: 10px;">0 টি</span>
                     </div>
 
-                    <div id="adminActiveTasksList" style="max-height: 220px; overflow-y: auto;">
-                        <!-- JS দিয়ে লোড হবে -->
-                    </div>
-
+                    <div id="adminActiveTasksList" style="max-height: 220px; overflow-y: auto;"></div>
                 </div>
 
             </div>
@@ -689,13 +692,13 @@
                     </div>
                     <div style="display:flex; gap:12px; align-items:flex-start;">
                         <div style="width:22px; height:22px; border-radius:50%; background:#7c3aed; color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0;">3</div>
-                        <div style="font-size:12px; color:var(--text-muted); line-height:1.5;">Withdraw your earnings instantly through bKash or Nagad.</div>
+                        <div style="font-size:12px; color:var(--text-muted); line-height:1.5;">Withdraw your earnings instantly through bKash or Nagad (Min. ৳1,020 & 20 Referrals).</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ==================== TAB 2: EARN (ডায়নামিক টাস্ক লোডার) ==================== -->
+        <!-- ==================== TAB 2: EARN ==================== -->
         <div id="view-earn" class="view-section">
             <div class="top-hero-banner" style="padding-bottom: 24px;">
                 <div style="display:flex; justify-content:space-between; align-items:flex-end;">
@@ -715,10 +718,9 @@
                     <i class="fa-regular fa-circle-check" style="color:var(--primary-purple);"></i> Active Tasks
                 </div>
 
-                <!-- ডায়নামিক টাস্ক কন্টেইনার -->
                 <div id="dynamicTasksListContainer">
                     <div style="text-align: center; padding: 24px; color: var(--text-muted);">
-                        <i class="fa-solid fa-spinner fa-spin"></i> টাস্ক লোড হচ্ছে...
+                        <i class="fa-solid fa-spinner fa-spin"></i> লোড হচ্ছে...
                     </div>
                 </div>
             </div>
@@ -763,7 +765,6 @@
                     </button>
                 </div>
 
-                <!-- Segment 1: Your Real Referrals View -->
                 <div id="segment-myrefs" style="display:none;">
                     <div id="myReferralsContainer">
                         <div class="card" style="text-align:center; padding:36px 20px;">
@@ -776,7 +777,6 @@
                     </div>
                 </div>
 
-                <!-- Segment 2: Leaderboard -->
                 <div id="segment-leaderboard">
                     <div class="leaderboard-row top-1">
                         <div style="display:flex; align-items:center; gap:10px;">
@@ -804,36 +804,18 @@
                         </div>
                         <div style="text-align:right;"><div style="font-size:14px; font-weight:800; color:#7c3aed;">610</div><div style="font-size:10px; color:var(--text-muted);">Referrals</div></div>
                     </div>
-
-                    <div class="leaderboard-row">
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <span style="font-size:12px; font-weight:800; color:var(--text-muted); width:20px;">#4</span>
-                            <div style="width:36px; height:36px; border-radius:50%; background:#e2e8f0; color:#64748b; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800;">DA</div>
-                            <div style="font-size:13px; font-weight:700;">Arpi</div>
-                        </div>
-                        <div style="text-align:right;"><div style="font-size:14px; font-weight:800; color:#7c3aed;">325</div><div style="font-size:10px; color:var(--text-muted);">Referrals</div></div>
-                    </div>
-
-                    <div class="leaderboard-row">
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <span style="font-size:12px; font-weight:800; color:var(--text-muted); width:20px;">#5</span>
-                            <div style="width:36px; height:36px; border-radius:50%; background:#e2e8f0; color:#64748b; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800;">SR</div>
-                            <div style="font-size:13px; font-weight:700;">SR Sultan</div>
-                        </div>
-                        <div style="text-align:right;"><div style="font-size:14px; font-weight:800; color:#7c3aed;">300</div><div style="font-size:10px; color:var(--text-muted);">Referrals</div></div>
-                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- ==================== TAB 4: WITHDRAW ==================== -->
+        <!-- ==================== TAB 4: WITHDRAW (আপডেটেড শর্তাবলী সহ) ==================== -->
         <div id="view-withdraw" class="view-section">
             <div class="top-hero-banner">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div>
                         <div style="font-size: 11px; letter-spacing: 0.8px; opacity: 0.85;">AVAILABLE BALANCE</div>
-                        <div style="font-size: 38px; font-weight: 900; margin: 2px 0;">৳ <span id="withdrawAvailBalance">0.00</span></div>
-                        <div style="font-size: 12px; opacity: 0.9;">Min. withdrawal: ৳ 1,020.00</div>
+                        <div style="font-size: 36px; font-weight: 900; margin: 2px 0;">৳ <span id="withdrawAvailBalance">0.00</span></div>
+                        <div style="font-size: 11px; opacity: 0.95;"><i class="fa-solid fa-circle-info"></i> নূন্যতম ৳ ১,০২০ & ২০টি রেফারেল আবশ্যক</div>
                     </div>
                     <div style="width:54px; height:54px; border-radius:18px; background:rgba(255,255,255,0.2); backdrop-filter:blur(10px); display:flex; align-items:center; justify-content:center; font-size:22px;">
                         <i class="fa-solid fa-wallet"></i>
@@ -842,6 +824,22 @@
             </div>
 
             <div class="content-body">
+                
+                <!-- 🎯 উইথড্রল শর্ত প্রগ্রেস কার্ড -->
+                <div class="req-card">
+                    <div style="font-weight: 800; color: #9d174d; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-shield-halved"></i> উইথড্রল যোগ্যতার শর্তসমূহ:
+                    </div>
+                    <div class="req-row">
+                        <span>১. নূন্যতম ব্যালেন্স (৳ ১,০২০.০০):</span>
+                        <span id="withdrawReqBalStatus" style="color: var(--accent-red);">অসম্পূর্ণ</span>
+                    </div>
+                    <div class="req-row">
+                        <span>২. নূন্যতম ২০টি রেফারেল:</span>
+                        <span id="withdrawReqRefStatus" style="color: var(--accent-red);">০ / ২০ টি</span>
+                    </div>
+                </div>
+
                 <div class="card">
                     <div style="font-size:15px; font-weight:800; color:var(--text-main); margin-bottom:14px; display:flex; align-items:center; gap:8px;">
                         <i class="fa-solid fa-arrow-down" style="color:var(--primary-purple);"></i> Request Payout
@@ -939,7 +937,6 @@
                     </div>
                 </div>
 
-                <!-- Bot Official Card -->
                 <div class="card" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px;">
                     <img src="https://cdn.imgchest.com/files/c68e8c1895d0.jpg" alt="Bot Logo" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--primary-purple); object-fit: cover;">
                     <div>
@@ -948,7 +945,7 @@
                     </div>
                 </div>
 
-                <!-- 🛡️ Admin Panel Trigger -->
+                <!-- Admin Panel Trigger -->
                 <div style="text-align: left; padding: 2px 6px;">
                     <div class="admin-trigger" onclick="openAdminModal()">
                         <i class="fa-solid fa-shield-halved" style="font-size: 12px; color: var(--primary-purple);"></i> Admin Panel
@@ -957,7 +954,7 @@
             </div>
         </div>
 
-        <!-- ==================== SUBVIEW: APP RULES ==================== -->
+        <!-- ==================== SUBVIEW: RULES ==================== -->
         <div id="modal-rules" class="rules-subview">
             <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
                 <i class="fa-solid fa-arrow-left" style="font-size:18px; cursor:pointer;" onclick="toggleAppRules(false)"></i>
@@ -973,10 +970,8 @@
                 </div>
                 <ul style="padding-left:18px; font-size:12px; color:#334155; line-height:1.7;">
                     <li>প্রতি ব্যক্তি, প্রতি ডিভাইসে এবং প্রতি Telegram ID-তে শুধুমাত্র একটি অ্যাকাউন্ট ব্যবহার করুন।</li>
-                    <li>নিজে task সম্পন্ন করুন — অটোমেশন, বট বা ক্লিক-ফার্ম ব্যবহার করা যাবে না।</li>
-                    <li>প্রকৃত বন্ধুদের রেফার করুন যারা সত্যিই অ্যাপটি ব্যবহার করতে চান।</li>
-                    <li>আপনার withdrawal অ্যাকাউন্টের তথ্য সঠিক ও আপডেট রাখুন।</li>
-                    <li>কোনো bug বা সন্দেহজনক কার্যকলাপ দেখলে Help & Support-এ জানান।</li>
+                    <li>উইথড্র করার আগে অবশ্যই নূন্যতম ৳ ১,০২০ ব্যালেন্স এবং অন্তত ২০টি সফল রেফার সম্পন্ন করুন।</li>
+                    <li>নিজে task সম্পন্ন করুন — অটোমেশন বা বট ব্যবহার করা যাবে না।</li>
                 </ul>
             </div>
 
@@ -985,19 +980,9 @@
                     <i class="fa-regular fa-circle-xmark"></i> যা করবেন না
                 </div>
                 <ul style="padding-left:18px; font-size:12px; color:#334155; line-height:1.7;">
-                    <li>রেফারেল বোনাস বা reward পাওয়ার জন্য একাধিক/ডুপ্লিকেট অ্যাকাউন্ট তৈরি করা যাবে না।</li>
-                    <li>task completion ভুয়া দেখাতে VPN, emulator, বট বা স্ক্রিপ্ট ব্যবহার করা যাবে না।</li>
-                    <li>নিজের ডিভাইস বা নেটওয়ার্ক থেকে তৈরি অ্যাকাউন্ট রেফার করা যাবে না।</li>
-                    <li>আপনার অ্যাকাউন্ট কারো সাথে শেয়ার, বিক্রি বা লেনদেন করা যাবে না।</li>
-                    <li>বাড়তি ব্যালেন্সের জন্য কোনো bug কাজে লাগানো যাবে না — বরং সেটা রিপোর্ট করুন।</li>
+                    <li>ভুয়া বা নকল রেফারেল তৈরি করবেন না। ডুপ্লিকেট রেফার ধরা পড়লে ব্যান করা হবে।</li>
+                    <li>উইথড্র করার শর্ত পূরণ ছাড়া ভুয়া রিকোয়েস্ট পাঠানো যাবে না।</li>
                 </ul>
-            </div>
-
-            <div class="rule-card-alert">
-                <div style="font-weight:800; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-                    <i class="fa-solid fa-triangle-exclamation"></i> নিয়ম ভঙ্গের ফলাফল
-                </div>
-                যেসব অ্যাকাউন্ট এই নিয়ম ভঙ্গ করবে — যেমন ভুয়া রেফারেল, একাধিক অ্যাকাউন্ট, অথবা ভুয়া task কার্যকলাপ — সেগুলো ফ্ল্যাগ হবে এবং স্থায়ীভাবে ব্যান হতে পারে, সাথে জমাকৃত ব্যালেন্সও বাতিল হয়ে যেতে পারে।
             </div>
         </div>
 
@@ -1028,13 +1013,13 @@
     </nav>
 
     <script>
-        // 🔴 BotFather API Token
         const BOT_TOKEN = "8759205204:AAHsn392BGTF4XIn0ujhDilei35b_j71nlo";
-        
-        // 🎯 Firebase Realtime Database
         const FIREBASE_DB_URL = "https://bangla-task-app-default-rtdb.firebaseio.com/";
         const BOT_USERNAME = "bangla_task_app_bot";
+        
+        // 🔒 উইথড্রল রুলস
         const MIN_PAYOUT = 1020;
+        const MIN_REQUIRED_REFERRALS = 20;
 
         let currentUserId = "8410886864";
         let balance = 0.00;
@@ -1046,9 +1031,8 @@
 
         let claimedTasksMap = {};
         let myReferralsData = {};
-        let allTasksMap = {}; // ডায়নামিক সব টাস্কের ডাটা
+        let allTasksMap = {};
 
-        // ডিফল্ট প্রাথমিক ৫টি চ্যানেল (ডাটাবেজ একদম খালি থাকলে এগুলো পুশ হবে)
         const DEFAULT_SEED_TASKS = {
             "task_1": { type: "telegram", name: "Prince Earning Zone", link: "https://t.me/PrinceEarningZone", username: "@PrinceEarningZone", reward: 50.00, tag: "JOIN BONUS" },
             "task_2": { type: "telegram", name: "পেমেন্ট প্রুফ চ্যানেল", link: "https://t.me/Bangla_TaskHub", username: "@Bangla_TaskHub", reward: 20.00, tag: "TELEGRAM" },
@@ -1096,7 +1080,7 @@
 
             document.getElementById('referralLinkText').innerText = `https://t.me/${BOT_USERNAME}?startapp=${currentUserId}`;
 
-            // 🚀 Firebase User Sync
+            // Firebase User Sync
             try {
                 const userRes = await fetch(`${FIREBASE_DB_URL}users/${currentUserId}.json`);
                 let userData = await userRes.json();
@@ -1115,7 +1099,6 @@
                         createdAt: new Date().toISOString()
                     };
 
-                    // Referral Credit Logic
                     if (startParam && startParam !== currentUserId) {
                         try {
                             const refRes = await fetch(`${FIREBASE_DB_URL}users/${startParam}.json`);
@@ -1169,18 +1152,16 @@
                 console.log("Firebase user sync warning:", err);
             }
 
-            // 🚀 ডাটাবেজ থেকে ডায়নামিক টাস্ক সিঙ্ক ও রেন্ডার
             await syncAndRenderTasks();
             updateAppUI();
         });
 
-        // ==================== DYNAMIC TASK ENGINE ====================
+        // ==================== TASK LOGIC ====================
         async function syncAndRenderTasks() {
             try {
                 const res = await fetch(`${FIREBASE_DB_URL}tasks.json`);
                 let data = await res.json();
 
-                // যদি ডাটাবেজে টাস্ক না থাকে, প্রাথমিক ৫টি টাস্ক স্বয়ংক্রিয়ভাবে ডাটাবেজে দিয়ে দিবে
                 if (!data) {
                     await fetch(`${FIREBASE_DB_URL}tasks.json`, {
                         method: 'PUT',
@@ -1257,13 +1238,11 @@
             updateAppUI();
         }
 
-        // ভিজিট ট্র্যাক (ওয়েব টাস্কের জন্য)
         let visitedTasksMap = {};
         function recordTaskVisit(taskId) {
             visitedTasksMap[taskId] = true;
         }
 
-        // 🔍 টাস্ক ভেরিফাই এবং টাকা ক্লেইম
         async function verifyAndClaimTask(taskId) {
             if (claimedTasksMap[taskId]) return;
 
@@ -1277,7 +1256,6 @@
             const reward = parseFloat(task.reward) || 0;
 
             if (task.type === 'telegram') {
-                // টেলিগ্রাম চ্যানেল মেম্বারশিপ যাচাই
                 if (!BOT_TOKEN || BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") {
                     showToast("⚠️ বটের API Token কোডে বসানো হয়নি!");
                     btn.innerHTML = 'Claim';
@@ -1305,17 +1283,13 @@
                     btn.disabled = false;
                     showToast("⚠️ যাচাই করতে সমস্যা হয়েছে! ইন্টারনেট চেক করুন।");
                 }
-
             } else {
-                // ওয়েবসাইট বা অ্যাপ টাস্ক যাচাই
                 if (!visitedTasksMap[taskId]) {
                     btn.innerHTML = 'Claim';
                     btn.disabled = false;
                     showToast("❌ আগে 'Visit' বাটনে ক্লিক করে ওয়েবসাইটটি ভিজিট করুন!");
                     return;
                 }
-
-                // ওয়েব টাস্ক সম্পন্ন
                 grantTaskReward(taskId, reward);
             }
         }
@@ -1333,7 +1307,6 @@
                 btn.disabled = false;
             }
 
-            // Firebase User Update
             fetch(`${FIREBASE_DB_URL}users/${currentUserId}.json`, {
                 method: 'PATCH',
                 body: JSON.stringify({
@@ -1348,7 +1321,7 @@
             updateAppUI();
         }
 
-        // 👥 Referrals List Renderer
+        // ==================== UI & REFERRALS ====================
         function renderMyReferralsList() {
             const container = document.getElementById('myReferralsContainer');
             const refKeys = Object.keys(myReferralsData);
@@ -1398,6 +1371,21 @@
             document.getElementById('statTotalEarned').innerText = totalEarned.toFixed(2);
             document.getElementById('referTabCount').innerText = totalReferrals;
             document.getElementById('referTabEarned').innerText = (totalReferrals * 50.00).toFixed(2);
+
+            // উইথড্রল শর্ত প্রগ্রেস স্ট্যাটাস আপডেট
+            const balStatusEl = document.getElementById('withdrawReqBalStatus');
+            if (balance >= MIN_PAYOUT) {
+                balStatusEl.innerHTML = '<span style="color:var(--accent-green);"><i class="fa-solid fa-check"></i> সম্পূর্ণ হয়েছে</span>';
+            } else {
+                balStatusEl.innerHTML = `<span style="color:var(--accent-red);">৳ ${balance.toFixed(2)} / ৳ ১,০২০.০০ (আরও ৳ ${(MIN_PAYOUT - balance).toFixed(2)} প্রয়োজন)</span>`;
+            }
+
+            const refStatusEl = document.getElementById('withdrawReqRefStatus');
+            if (totalReferrals >= MIN_REQUIRED_REFERRALS) {
+                refStatusEl.innerHTML = `<span style="color:var(--accent-green);"><i class="fa-solid fa-check"></i> সম্পন্ন (${totalReferrals}/${MIN_REQUIRED_REFERRALS} টি)</span>`;
+            } else {
+                refStatusEl.innerHTML = `<span style="color:var(--accent-red);">${totalReferrals} / ${MIN_REQUIRED_REFERRALS} টি (আরও ${MIN_REQUIRED_REFERRALS - totalReferrals} টি বাকি)</span>`;
+            }
 
             const allKeys = Object.keys(allTasksMap);
             const totalTasksCount = allKeys.length;
@@ -1458,57 +1446,125 @@
             document.getElementById('btnMethodNagad').className = `method-card ${method === 'nagad' ? 'selected-nagad' : ''}`;
         }
 
+        // =========================================================================
+        // 🔒 আপডেটেড উইথড্রল রিকোয়েস্ট (ডাটাবেস ভেরিফিকেশন ও শর্তাবলী নোটিশ)
+        // =========================================================================
         async function handlePayoutRequest() {
             const accountNo = document.getElementById('payoutAccountNo').value.trim();
             const amount = parseFloat(document.getElementById('payoutAmountInput').value);
+            const btn = document.getElementById('btnSubmitPayout');
 
             if (!accountNo || accountNo.length < 11) {
-                alert("দয়া করে সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন!");
+                alert("⚠️ দয়া করে সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন!");
                 return;
             }
             if (isNaN(amount) || amount < MIN_PAYOUT) {
-                alert(`নূন্যতম উত্তোলনের পরিমাণ ৳ ${MIN_PAYOUT}.00`);
-                return;
-            }
-            if (amount > balance) {
-                alert("আপনার একাউন্টে পর্যাপ্ত ব্যালেন্স নেই!");
+                alert(`⚠️ নূন্যতম উত্তোলনের পরিমাণ ৳ ${MIN_PAYOUT}.00`);
                 return;
             }
 
-            balance -= amount;
-            totalWithdrawn += amount;
-            updateAppUI();
+            // বাটন লোডিং স্টেট
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ডাটাবেস যাচাই করা হচ্ছে...';
+            btn.disabled = true;
 
-            fetch(`${FIREBASE_DB_URL}users/${currentUserId}.json`, {
-                method: 'PATCH',
-                body: JSON.stringify({ balance: balance, totalWithdrawn: totalWithdrawn })
-            }).catch(e => console.log(e));
+            try {
+                // 🔍 সরাসরি ফায়ারবেস ডাটাবেস থেকে রিয়েল-টাইম তথ্য যাচাই
+                const userRes = await fetch(`${FIREBASE_DB_URL}users/${currentUserId}.json`);
+                const dbUserData = await userRes.json();
 
-            fetch(`${FIREBASE_DB_URL}withdrawals.json`, {
-                method: 'POST',
-                body: JSON.stringify({
-                    userId: currentUserId,
-                    method: selectedMethod,
-                    number: accountNo,
-                    amount: amount,
-                    time: new Date().toLocaleString()
-                })
-            }).catch(e => console.log(e));
+                if (!dbUserData) {
+                    alert("❌ ব্যবহারকারীর তথ্য ডাটাবেজে পাওয়া যায়নি!");
+                    btn.innerHTML = `Request ৳ ${amount.toFixed(2)}`;
+                    btn.disabled = false;
+                    return;
+                }
 
-            alert(`✅ আপনার ৳ ${amount}.00 উইথড্র রিকোয়েস্ট সফলভাবে জমা হয়েছে!\nপেমেন্ট মেথড: ${selectedMethod.toUpperCase()}\nঅ্যাকাউন্ট: ${accountNo}`);
-            document.getElementById('payoutAccountNo').value = '';
-            document.getElementById('payoutHistoryBox').innerHTML = `
-                <div style="display:flex; justify-content:space-between; font-weight:700; color:var(--text-main);">
-                    <span>${selectedMethod.toUpperCase()} (${accountNo})</span>
-                    <span style="color:var(--accent-green);">৳ ${amount.toFixed(2)} (Pending)</span>
-                </div>
-            `;
+                const dbBalance = parseFloat(dbUserData.balance || 0);
+                const dbReferrals = parseInt(dbUserData.referrals || 0);
+
+                // শর্ত অপূর্ণতা গণনা
+                const isBalanceLow = dbBalance < amount;
+                const isReferralsLow = dbReferrals < MIN_REQUIRED_REFERRALS;
+
+                // ❌ কোনো শর্ত অপূর্ণ থাকলে বিস্তারিত নোটিশ অ্যালার্ট
+                if (isBalanceLow || isReferralsLow) {
+                    let alertMsg = "⚠️ উইথড্র শর্ত অপূর্ণ রয়েছে!\n\nউইথড্র করার জন্য আপনার প্রয়োজন:\n";
+                    
+                    if (isBalanceLow) {
+                        const neededBal = (amount - dbBalance).toFixed(2);
+                        alertMsg += `❌ আপনার ব্যালেন্স অপর্যাপ্ত! (বর্তমান: ৳ ${dbBalance.toFixed(2)}, আরও প্রয়োজন: ৳ ${neededBal})\n`;
+                    } else {
+                        alertMsg += `✅ ব্যালেন্স পর্যাপ্ত আছে (৳ ${dbBalance.toFixed(2)})\n`;
+                    }
+
+                    if (isReferralsLow) {
+                        const neededRefs = MIN_REQUIRED_REFERRALS - dbReferrals;
+                        alertMsg += `❌ নূন্যতম ২০টি রেফারেল আবশ্যক! (বর্তমান রেফারেল: ${dbReferrals} টি, আরও প্রয়োজন: ${neededRefs} টি)\n`;
+                    } else {
+                        alertMsg += `✅ রেফারেল পূরণ হয়েছে (${dbReferrals} টি)\n`;
+                    }
+
+                    alertMsg += "\nঅনুগ্রহ করে শর্তগুলো পূরণ করে পুনরায় উইথড্র রিকোয়েস্ট দিন।";
+                    alert(alertMsg);
+
+                    btn.innerHTML = `Request ৳ ${amount.toFixed(2)}`;
+                    btn.disabled = false;
+                    return;
+                }
+
+                // ✅ সকল শর্ত পূরণ হয়েছে! উইথড্র প্রসেস সম্পন্ন করা
+                const newBal = dbBalance - amount;
+                const newWithdrawn = (dbUserData.totalWithdrawn || 0) + amount;
+
+                // ১. ইউজারের ব্যালেন্স কাটা
+                await fetch(`${FIREBASE_DB_URL}users/${currentUserId}.json`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ 
+                        balance: newBal, 
+                        totalWithdrawn: newWithdrawn 
+                    })
+                });
+
+                // ২. উইথড্রল হিস্ট্রি রিকোয়েস্টে জমা
+                await fetch(`${FIREBASE_DB_URL}withdrawals.json`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        userId: currentUserId,
+                        method: selectedMethod,
+                        number: accountNo,
+                        amount: amount,
+                        userReferrals: dbReferrals,
+                        time: new Date().toLocaleString()
+                    })
+                });
+
+                // লোকাল ভেরিয়েবল আপডেট
+                balance = newBal;
+                totalWithdrawn = newWithdrawn;
+                totalReferrals = dbReferrals;
+                updateAppUI();
+
+                alert(`🎉 সফল হয়েছে!\n\nআপনার ৳ ${amount.toFixed(2)} উত্তোলনের রিকোয়েস্ট গ্রহণ করা হয়েছে।\nপেমেন্ট মেথড: ${selectedMethod.toUpperCase()}\nঅ্যাকাউন্ট: ${accountNo}\n\nখুব শীঘ্রই টাকা আপনার অ্যাকাউন্টে পাঠিয়ে দেওয়া হবে।`);
+                
+                document.getElementById('payoutAccountNo').value = '';
+                document.getElementById('payoutHistoryBox').innerHTML = `
+                    <div style="display:flex; justify-content:space-between; font-weight:700; color:var(--text-main);">
+                        <span>${selectedMethod.toUpperCase()} (${accountNo})</span>
+                        <span style="color:var(--accent-green);">৳ ${amount.toFixed(2)} (Pending)</span>
+                    </div>
+                `;
+
+            } catch (err) {
+                alert("❌ ইন্টারনেট কানেকশন চেক করুন! উইথড্র রিকোয়েস্ট পাঠানো সম্ভব হয়নি।");
+            }
+
+            btn.innerHTML = `Request ৳ ${amount.toFixed(2)}`;
+            btn.disabled = false;
         }
 
         // =========================================================================
-        // ==================== 🛡️ SUPER ADMIN PANEL LOGIC =========================
+        // 🛡️ SUPER ADMIN PANEL LOGIC
         // =========================================================================
-
         function openAdminModal() {
             document.getElementById('adminModal').style.display = 'flex';
             document.getElementById('adminAuth').style.display = 'block';
@@ -1542,7 +1598,6 @@
             document.getElementById('adminTargetUser').value = currentUserId;
         }
 
-        // 💰 ১. ব্যালেন্স কন্ট্রোল (Modify বা Set)
         async function handleBalanceAdmin(actionType) {
             const targetId = document.getElementById('adminTargetUser').value.trim() || currentUserId;
             const inputVal = parseFloat(document.getElementById('adminBalanceInput').value);
@@ -1590,7 +1645,6 @@
             }
         }
 
-        // 👥 ২. রেফারেল কন্ট্রোল (Modify বা Set)
         async function handleRefsAdmin(actionType) {
             const targetId = document.getElementById('adminTargetUser').value.trim() || currentUserId;
             const inputVal = parseInt(document.getElementById('adminRefsInput').value);
@@ -1633,14 +1687,12 @@
             }
         }
 
-        // 📢 ও 🌐 ৩. টাস্ক ক্যাটাগরি ফিল্ড টগল
         function toggleTaskFormCategory() {
             const cat = document.getElementById('taskCategorySelect').value;
             document.getElementById('wrapTelegramField').style.display = cat === 'telegram' ? 'block' : 'none';
             document.getElementById('wrapWebsiteField').style.display = cat === 'website' ? 'block' : 'none';
         }
 
-        // 🚀 ৪. নতুন টাস্ক ডাটাবেসে পাবলিশ করা
         async function submitNewTask() {
             const cat = document.getElementById('taskCategorySelect').value;
             const title = document.getElementById('taskTitleInput').value.trim();
@@ -1685,7 +1737,6 @@
 
                 allTasksMap[taskId] = taskPayload;
 
-                // ইনপুট ক্লিয়ার
                 document.getElementById('taskTitleInput').value = '';
                 document.getElementById('taskLinkInput').value = '';
                 document.getElementById('taskUsernameInput').value = '';
@@ -1704,7 +1755,6 @@
             btn.disabled = false;
         }
 
-        // 🗑️ ৫. টাস্ক ডিলিট করার ফাংশন
         async function deleteSingleTask(taskId) {
             if (!confirm("আপনি কি নিশ্চিতভাবে এই টাস্কটি মুছে ফেলতে চান?")) return;
 
@@ -1723,7 +1773,6 @@
             }
         }
 
-        // অ্যাডমিন প্যানেলে টাস্ক লিস্ট দেখানো
         function renderAdminTaskList() {
             const container = document.getElementById('adminActiveTasksList');
             const taskKeys = Object.keys(allTasksMap);
