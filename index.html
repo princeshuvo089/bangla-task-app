@@ -1,3 +1,6 @@
+নিচে পুরো কোডটি একটি কোড ব্লকে দেওয়া হলো। কোড বক্সটির ওপরের ডান কোণায় থাকা Copy
+বাটনে ক্লিক করলেই পুরো কোডটি এক ক্লিকে একসাথে কপি হয়ে যাবে:
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -372,7 +375,7 @@
         }
 
         .rules-subview { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f8f9fe; z-index: 9999; display: none; overflow-y: auto; padding: 16px; }
-        .rules-subview.active { display: block; }
+        .rules-subview.active { display: flex; flex-direction: column; }
         .rule-card-green { background: #fff; border: 1px solid #bbf7d0; border-radius: 20px; padding: 18px; margin-bottom: 14px; }
         .rule-card-red { background: #fff; border: 1px solid #fecaca; border-radius: 20px; padding: 18px; margin-bottom: 14px; }
 
@@ -441,7 +444,7 @@
 
         .admin-tabs {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             background: #f1f5f9;
             padding: 4px;
             border-radius: 14px;
@@ -450,8 +453,8 @@
 
         .admin-tab-btn {
             flex: 1;
-            padding: 8px 6px;
-            font-size: 11px;
+            padding: 8px 4px;
+            font-size: 10.5px;
             font-weight: 800;
             border: none;
             border-radius: 10px;
@@ -462,7 +465,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 4px;
         }
 
         .admin-tab-btn.active {
@@ -488,18 +491,48 @@
         .btn-set { background: #0284c7; color: #fff; }
         .btn-modify { background: #10b981; color: #fff; }
         .btn-delete-task { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; border-radius: 10px; padding: 6px 9px; cursor: pointer; }
+
+        /* ================= CHAT STYLES ================= */
+        .chat-bubble {
+            max-width: 80%;
+            padding: 9px 13px;
+            border-radius: 16px;
+            font-size: 12.5px;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            word-break: break-word;
+        }
+        .chat-bubble-user {
+            background: var(--gradient-btn);
+            color: #fff;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-bubble-admin {
+            background: #f1f5f9;
+            color: var(--text-main);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }
+        .chat-time {
+            font-size: 9px;
+            opacity: 0.7;
+            margin-top: 3px;
+            text-align: right;
+        }
     </style>
 </head>
 <body>
 
     <div class="toast-msg" id="toast">মেসেজ</div>
 
-    <!-- ==================== ADMIN PANEL MODAL ==================== -->
+    <!-- ==================== SUPER ADMIN PANEL ==================== -->
     <div id="adminModal" class="modal-overlay" style="display: none;">
         <div class="admin-modal-card">
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0;">
-                <h4 style="font-size: 15px; font-weight: 800; color: var(--primary-purple); display: flex; align-items: center; gap: 6px;">
+                <h4 style="font-size: 14px; font-weight: 800; color: var(--primary-purple); display: flex; align-items: center; gap: 6px;">
                     <i class="fa-solid fa-shield-halved"></i> সুপার অ্যাডমিন প্যানেল
                 </h4>
                 <span onclick="closeAdminModal()" style="cursor: pointer; font-size: 22px; color: var(--text-muted);">&times;</span>
@@ -515,13 +548,17 @@
                 
                 <div class="admin-tabs">
                     <button class="admin-tab-btn active" id="btnAdminTab1" onclick="switchAdminSubTab(1)">
-                        <i class="fa-solid fa-wallet"></i> ১. ব্যালেন্স ও রেফার
+                        <i class="fa-solid fa-wallet"></i> ব্যালেন্স
                     </button>
                     <button class="admin-tab-btn" id="btnAdminTab2" onclick="switchAdminSubTab(2)">
-                        <i class="fa-solid fa-list-check"></i> ২. টাস্ক পাবলিশার
+                        <i class="fa-solid fa-list-check"></i> টাস্ক
+                    </button>
+                    <button class="admin-tab-btn" id="btnAdminTab3" onclick="switchAdminSubTab(3)">
+                        <i class="fa-solid fa-headset"></i> সাপোর্ট <span id="adminUnreadCountBadge" style="display:none; background:#ef4444; color:#fff; border-radius:50%; width:14px; height:14px; font-size:9px; line-height:14px; text-align:center;">•</span>
                     </button>
                 </div>
 
+                <!-- Admin Tab 1: ব্যালেন্স ও রেফার -->
                 <div id="adminSubTab1">
                     <div style="margin-bottom: 12px;">
                         <label style="font-size: 11px; font-weight: 800; color: var(--text-muted); display: flex; justify-content: space-between; margin-bottom: 4px;">
@@ -560,6 +597,7 @@
                     </div>
                 </div>
 
+                <!-- Admin Tab 2: টাস্ক পাবলিশার -->
                 <div id="adminSubTab2" style="display: none;">
                     <div class="card" style="background: #fdf4ff; border: 1px solid #f0abfc; padding: 12px; margin-bottom: 12px;">
                         <label style="font-size: 12px; font-weight: 800; color: #86198f; display: block; margin-bottom: 4px;">ক্যাটাগরি নির্বাচন করুন:</label>
@@ -598,6 +636,41 @@
                     </div>
 
                     <div id="adminActiveTasksList" style="max-height: 220px; overflow-y: auto;"></div>
+                </div>
+
+                <!-- Admin Tab 3: লাইভ সাপোর্ট ইনবক্স -->
+                <div id="adminSubTab3" style="display: none;">
+                    <div id="adminSupportChatListView">
+                        <div style="font-size: 12px; font-weight: 800; color: var(--text-muted); margin-bottom: 8px; display:flex; justify-content:space-between;">
+                            <span>📩 ব্যবহারকারীদের মেসেজ তালিকা:</span>
+                            <span onclick="loadAdminSupportChats()" style="color:var(--primary-purple); cursor:pointer;"><i class="fa-solid fa-rotate"></i> রিফ্রেশ</span>
+                        </div>
+                        <div id="adminSupportUsersList" style="max-height: 320px; overflow-y: auto;">
+                            <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:12px;">লোড হচ্ছে...</div>
+                        </div>
+                    </div>
+
+                    <!-- Single User Chat View for Admin -->
+                    <div id="adminSupportSingleChatView" style="display: none;">
+                        <div style="display:flex; align-items:center; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid #e2e8f0; margin-bottom:8px;">
+                            <span onclick="backToAdminSupportList()" style="cursor:pointer; font-size:12px; font-weight:800; color:var(--primary-purple);">
+                                <i class="fa-solid fa-arrow-left"></i> ব্যাক
+                            </span>
+                            <div style="font-size:11px; font-weight:800; text-align:right;">
+                                <div id="adminChatCurrentUserName">User</div>
+                                <div style="font-size:9px; color:var(--text-muted);" id="adminChatCurrentUserId">ID: ...</div>
+                            </div>
+                        </div>
+
+                        <div id="adminChatMessagesBox" style="height:230px; overflow-y:auto; display:flex; flex-direction:column; padding:6px; background:#f8fafc; border-radius:12px; margin-bottom:8px;"></div>
+
+                        <div style="display:flex; gap:6px;">
+                            <input type="text" id="adminReplyInput" class="input-field" placeholder="রিপ্লাই লিখুন..." style="margin-bottom:0; font-size:12px;">
+                            <button class="btn-action-primary" style="width: auto; padding: 0 16px; border-radius:12px;" onclick="sendAdminReply()">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -923,14 +996,15 @@
                 </div>
 
                 <div class="card" style="padding:4px 14px;">
+                    <!-- হেল্প এবং সাপোর্ট বাটন -->
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid #f1f5f9; cursor:pointer;" onclick="openHelpSupport()">
                         <div style="display:flex; align-items:center; gap:12px;">
                             <div style="width:40px; height:40px; border-radius:50%; background:#e0f2fe; color:#0284c7; display:flex; align-items:center; justify-content:center; font-size:17px;">
-                                <i class="fa-regular fa-circle-question"></i>
+                                <i class="fa-regular fa-comment-dots"></i>
                             </div>
                             <div>
-                                <div style="font-size:14px; font-weight:800;">Help & Support</div>
-                                <div style="font-size:11px; color:var(--text-muted);">Contact our team on Telegram</div>
+                                <div style="font-size:14px; font-weight:800;">Help & Support (Live Chat)</div>
+                                <div style="font-size:11px; color:var(--text-muted);">সরাসরি অ্যাডমিনের সাথে চ্যাট করুন</div>
                             </div>
                         </div>
                         <i class="fa-solid fa-chevron-right" style="color:#cbd5e1; font-size:13px;"></i>
@@ -963,6 +1037,36 @@
                         <i class="fa-solid fa-shield-halved" style="font-size: 12px; color: var(--primary-purple);"></i> Admin Panel
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- ==================== SUBVIEW: IN-APP USER SUPPORT CHAT ==================== -->
+        <div id="modal-support" class="rules-subview" style="padding:0;">
+            <!-- Support Top Bar -->
+            <div style="background:var(--gradient-header); padding:16px; color:#fff; display:flex; align-items:center; gap:12px; border-radius:0 0 20px 20px;">
+                <i class="fa-solid fa-arrow-left" style="font-size:18px; cursor:pointer;" onclick="closeHelpSupport()"></i>
+                <div style="flex:1;">
+                    <div style="font-size:15px; font-weight:800;">Official Support Desk</div>
+                    <div style="font-size:11px; opacity:0.9;" id="userTicketIdDisplay">Ticket: #SUPPORT</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:5px; font-size:11px; background:rgba(255,255,255,0.2); padding:4px 10px; border-radius:15px;">
+                    <div style="width:7px; height:7px; background:#10b981; border-radius:50%;"></div> Online
+                </div>
+            </div>
+
+            <!-- Messages Area -->
+            <div id="userChatMessagesContainer" style="flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column;">
+                <div style="text-align:center; margin:20px 0; color:var(--text-muted); font-size:11px;">
+                    স্বাগতম! আপনার কোনো প্রশ্ন বা সমস্যা থাকলে নিচে লিখে পাঠান। অ্যাডমিন টিম দ্রুত উত্তর দেবে।
+                </div>
+            </div>
+
+            <!-- Input Bar -->
+            <div style="padding:10px 14px; background:#fff; border-top:1px solid #e2e8f0; display:flex; gap:8px; align-items:center;">
+                <input type="text" id="userSupportMsgInput" class="input-field" placeholder="আপনার সমস্যা বা বার্তা লিখুন..." style="margin-bottom:0; font-size:13px; border-radius:25px;" onkeypress="if(event.key === 'Enter') sendUserSupportMessage()">
+                <button onclick="sendUserSupportMessage()" style="width:42px; height:42px; border-radius:50%; background:var(--gradient-btn); color:#fff; border:none; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; box-shadow:0 3px 10px rgba(236,72,153,0.3);">
+                    <i class="fa-solid fa-paper-plane" style="font-size:14px;"></i>
+                </button>
             </div>
         </div>
 
@@ -1033,6 +1137,7 @@
         const MIN_REQUIRED_REFERRALS = 20;
 
         let currentUserId = "8410886864";
+        let currentUserName = "User";
         let balance = 0.00;
         let totalEarned = 0.00;
         let totalReferrals = 0;
@@ -1044,8 +1149,13 @@
         let myReferralsData = {};
         let allTasksMap = {};
         
-        // 🔒 পুরাতন ইউজার ফ্ল্যাগ (Old Bot User Tracking)
+        // 🔒 পুরাতন ইউজার ফ্ল্যাগ
         let isOldBotUser = false;
+
+        // চ্যাট ইন্টারভাল টাইমার
+        let userChatPollTimer = null;
+        let adminChatPollTimer = null;
+        let adminActiveChatUserId = null;
 
         const DEFAULT_SEED_TASKS = {
             "task_1": { type: "telegram", name: "Prince Earning Zone", link: "https://t.me/PrinceEarningZone", username: "@PrinceEarningZone", reward: 50.00, tag: "JOIN BONUS" },
@@ -1071,6 +1181,7 @@
             if (tgUser) {
                 currentUserId = tgUser.id.toString();
                 firstName = [tgUser.first_name, tgUser.last_name].filter(Boolean).join(' ').trim() || 'User';
+                currentUserName = firstName;
                 const userTag = tgUser.username ? '@' + tgUser.username : 'ID: ' + tgUser.id;
 
                 document.getElementById('homeUserName').innerText = firstName;
@@ -1085,6 +1196,7 @@
             } else {
                 currentUserId = localStorage.getItem('bth_demo_uid') || '8410886864';
                 localStorage.setItem('bth_demo_uid', currentUserId);
+                currentUserName = "Demo User";
 
                 document.getElementById('homeUserName').innerText = "Demo User";
                 document.getElementById('profileUserName').innerText = "Demo User";
@@ -1093,14 +1205,14 @@
             }
 
             document.getElementById('referralLinkText').innerText = `https://t.me/${BOT_USERNAME}?startapp=${currentUserId}`;
+            document.getElementById('userTicketIdDisplay').innerText = `Ticket: #${currentUserId}`;
 
-            // 🚀 Firebase User Sync & Old User Detection
+            // 🚀 Firebase User Sync
             try {
                 const userRes = await fetch(`${FIREBASE_DB_URL}users/${currentUserId}.json`);
                 let userData = await userRes.json();
 
                 if (!userData) {
-                    // 🌟 নতুন ব্যবহারকারী (New User) - এরা ক্লেইম করার সুযোগ পাবে
                     userData = {
                         id: currentUserId,
                         name: firstName,
@@ -1111,7 +1223,7 @@
                         tasksDone: 0,
                         totalWithdrawn: 0.00,
                         claimedTasks: {},
-                        isNewUser: true, // নতুন ইউজার চিহ্নিতকরণ
+                        isNewUser: true,
                         createdAt: new Date().toISOString()
                     };
 
@@ -1156,8 +1268,6 @@
                     isOldBotUser = false;
 
                 } else {
-                    // ⚠️ আগে থেকেই ডাটাবেসে থাকা ইউজার (Existing User)
-                    // যদি ইউজার নতুন না হয়, তবে সে পূর্বে থেকেই বটের ইউজার হিসেবে গণ্য হবে
                     if (!userData.isNewUser) {
                         isOldBotUser = true;
                     }
@@ -1197,7 +1307,6 @@
 
                 allTasksMap = data || {};
 
-                // 🔒 পুরাতন ইউজারদের জন্য স্বয়ংক্রিয়ভাবে চ্যানেলের টাস্কসমূহ Claimed করে দেওয়া
                 if (isOldBotUser) {
                     let shouldPatch = false;
                     Object.keys(allTasksMap).forEach(tId => {
@@ -1210,7 +1319,6 @@
                         }
                     });
 
-                    // ডাটাবেসে সেভ যাতে স্থায়ীভাবে Claimed থাকে
                     if (shouldPatch) {
                         fetch(`${FIREBASE_DB_URL}users/${currentUserId}/claimedTasks.json`, {
                             method: 'PATCH',
@@ -1239,7 +1347,6 @@
             document.getElementById('tgTasksCountBadge').innerText = `${tgKeys.length} টি`;
             document.getElementById('extraTasksCountBadge').innerText = `${extraKeys.length} টি`;
 
-            // ১. টেলিগ্রাম চ্যানেল জয়েন টাস্ক রেন্ডার
             if (tgKeys.length === 0) {
                 tgContainer.innerHTML = `
                     <div class="card" style="text-align:center; padding:18px; color:var(--text-muted); font-size:12px;">
@@ -1250,7 +1357,6 @@
                 let tgHtml = '';
                 tgKeys.forEach(tId => {
                     const task = allTasksMap[tId];
-                    // যদি আগে থেকেই ক্লেইম করা থাকে বা পুরাতন ইউজার হয় তাহলে claimed দেখাবে
                     const isClaimed = (claimedTasksMap[tId] || isOldBotUser) ? true : false;
                     
                     tgHtml += `
@@ -1282,7 +1388,6 @@
                 tgContainer.innerHTML = tgHtml;
             }
 
-            // ২. এক্সট্রা ওয়েবসাইট / অ্যাপ টাস্ক রেন্ডার
             if (extraKeys.length === 0) {
                 extraContainer.innerHTML = `
                     <div class="card" style="text-align:center; padding:24px 16px; color:var(--text-muted); font-size:12px; background:#fffcf9; border: 1px dashed #fdba74;">
@@ -1339,7 +1444,6 @@
             const task = allTasksMap[taskId];
             if (!task) return;
 
-            // 🔒 পুরাতন ইউজার হলে টেলিগ্রাম টাস্ক সম্পূর্ণ ব্লক
             if (isOldBotUser && (task.type || 'telegram') === 'telegram') {
                 showToast("⚠️ আপনি আগের ইউজার হওয়ায় এই চ্যানেলের বোনাস ক্লেইম করা সম্ভব নয়!");
                 return;
@@ -1524,8 +1628,109 @@
             document.getElementById('modal-rules').classList.toggle('active', show);
         }
 
+        // ==================== IN-APP LIVE SUPPORT CHAT (USER SIDE) ====================
         function openHelpSupport() {
-            window.open('https://t.me/LiveSupportBD', '_blank');
+            document.getElementById('modal-support').classList.add('active');
+            loadUserSupportChat();
+            if (userChatPollTimer) clearInterval(userChatPollTimer);
+            userChatPollTimer = setInterval(loadUserSupportChat, 4000);
+        }
+
+        function closeHelpSupport() {
+            document.getElementById('modal-support').classList.remove('active');
+            if (userChatPollTimer) {
+                clearInterval(userChatPollTimer);
+                userChatPollTimer = null;
+            }
+        }
+
+        async function loadUserSupportChat() {
+            try {
+                const res = await fetch(`${FIREBASE_DB_URL}support_chats/${currentUserId}/messages.json`);
+                const messagesData = await res.json();
+                renderUserChatMessages(messagesData);
+            } catch (err) {
+                console.log("Chat load error:", err);
+            }
+        }
+
+        function renderUserChatMessages(messagesObj) {
+            const container = document.getElementById('userChatMessagesContainer');
+            if (!messagesObj) return;
+
+            let html = `
+                <div style="text-align:center; margin:10px 0; color:var(--text-muted); font-size:11px;">
+                    টিকেট চালু হয়েছে (ID: #${currentUserId})
+                </div>
+            `;
+
+            Object.keys(messagesObj).forEach(msgKey => {
+                const m = messagesObj[msgKey];
+                const isMe = m.sender === 'user';
+                const timeStr = m.time || '';
+
+                html += `
+                    <div class="chat-bubble ${isMe ? 'chat-bubble-user' : 'chat-bubble-admin'}">
+                        <div style="font-size:9.5px; font-weight:800; opacity:0.8; margin-bottom:2px;">
+                            ${isMe ? 'আপনি' : '🛡️ সাপোর্ট অ্যাডমিন'}
+                        </div>
+                        <div>${m.text}</div>
+                        <div class="chat-time">${timeStr}</div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function sendUserSupportMessage() {
+            const input = document.getElementById('userSupportMsgInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            input.value = '';
+            const timestamp = Date.now();
+            const timeStr = new Date().toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' });
+
+            const newMsg = {
+                sender: 'user',
+                text: msg,
+                time: timeStr,
+                timestamp: timestamp
+            };
+
+            const container = document.getElementById('userChatMessagesContainer');
+            container.innerHTML += `
+                <div class="chat-bubble chat-bubble-user">
+                    <div style="font-size:9.5px; font-weight:800; opacity:0.8; margin-bottom:2px;">আপনি</div>
+                    <div>${msg}</div>
+                    <div class="chat-time">${timeStr}</div>
+                </div>
+            `;
+            container.scrollTop = container.scrollHeight;
+
+            try {
+                await fetch(`${FIREBASE_DB_URL}support_chats/${currentUserId}/messages.json`, {
+                    method: 'POST',
+                    body: JSON.stringify(newMsg)
+                });
+
+                await fetch(`${FIREBASE_DB_URL}support_chats/${currentUserId}/meta.json`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({
+                        userId: currentUserId,
+                        userName: currentUserName,
+                        lastMessage: msg,
+                        lastTime: timeStr,
+                        timestamp: timestamp,
+                        hasUnreadForAdmin: true
+                    })
+                });
+
+            } catch (err) {
+                showToast("❌ মেসেজ পাঠানো যায়নি, নেট কানেকশন চেক করুন!");
+            }
         }
 
         function copyRefLink() {
@@ -1658,6 +1863,7 @@
 
         function closeAdminModal() {
             document.getElementById('adminModal').style.display = 'none';
+            if (adminChatPollTimer) clearInterval(adminChatPollTimer);
         }
 
         function verifyAdminAuth() {
@@ -1674,8 +1880,17 @@
         function switchAdminSubTab(tabNum) {
             document.getElementById('btnAdminTab1').classList.toggle('active', tabNum === 1);
             document.getElementById('btnAdminTab2').classList.toggle('active', tabNum === 2);
+            document.getElementById('btnAdminTab3').classList.toggle('active', tabNum === 3);
+
             document.getElementById('adminSubTab1').style.display = tabNum === 1 ? 'block' : 'none';
             document.getElementById('adminSubTab2').style.display = tabNum === 2 ? 'block' : 'none';
+            document.getElementById('adminSubTab3').style.display = tabNum === 3 ? 'block' : 'none';
+
+            if (tabNum === 3) {
+                loadAdminSupportChats();
+            } else {
+                if (adminChatPollTimer) clearInterval(adminChatPollTimer);
+            }
         }
 
         function fillMyIdToAdmin() {
@@ -1885,6 +2100,160 @@
             });
 
             container.innerHTML = html;
+        }
+
+        // ==================== ADMIN SUPPORT CHAT LOGIC ====================
+        async function loadAdminSupportChats() {
+            const container = document.getElementById('adminSupportUsersList');
+            container.innerHTML = '<div style="text-align:center; padding:15px; font-size:11px; color:var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> ইনবক্স লোড হচ্ছে...</div>';
+
+            try {
+                const res = await fetch(`${FIREBASE_DB_URL}support_chats.json`);
+                const allChats = await res.json();
+
+                if (!allChats || Object.keys(allChats).length === 0) {
+                    container.innerHTML = '<div style="text-align:center; padding:20px; font-size:12px; color:var(--text-muted);">এখনো কোনো সাপোর্ট মেসেজ আসেনি।</div>';
+                    return;
+                }
+
+                let html = '';
+                const uids = Object.keys(allChats);
+                let hasUnread = false;
+
+                uids.sort((a, b) => ((allChats[b].meta?.timestamp || 0) - (allChats[a].meta?.timestamp || 0)));
+
+                uids.forEach(uid => {
+                    const chatObj = allChats[uid];
+                    const meta = chatObj.meta || {};
+                    const lastMsg = meta.lastMessage || 'নতুন টিকিট';
+                    const uName = meta.userName || 'User ' + uid;
+                    const isUnread = meta.hasUnreadForAdmin === true;
+
+                    if (isUnread) hasUnread = true;
+
+                    html += `
+                        <div onclick="openAdminChatWithUser('${uid}', '${uName}')" style="display:flex; justify-content:space-between; align-items:center; background:${isUnread ? '#fdf2f8' : '#f8fafc'}; border:1px solid ${isUnread ? '#f472b6' : '#e2e8f0'}; padding:9px 12px; border-radius:12px; margin-bottom:6px; cursor:pointer;">
+                            <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:240px;">
+                                <div style="font-size:12px; font-weight:800; color:var(--text-main);">
+                                    ${uName} <span style="font-size:10px; color:var(--text-muted); font-weight:normal;">(#${uid})</span>
+                                </div>
+                                <div style="font-size:11px; color:${isUnread ? '#db2777' : 'var(--text-muted)'}; font-weight:${isUnread ? '700' : 'normal'};">
+                                    ${lastMsg}
+                                </div>
+                            </div>
+                            <div style="text-align:right; font-size:10px; color:var(--text-muted);">
+                                <div>${meta.lastTime || ''}</div>
+                                ${isUnread ? '<span style="display:inline-block; width:8px; height:8px; background:#ec4899; border-radius:50%; margin-top:2px;"></span>' : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+                document.getElementById('adminUnreadCountBadge').style.display = hasUnread ? 'inline-block' : 'none';
+
+            } catch (err) {
+                container.innerHTML = '<div style="text-align:center; padding:15px; font-size:11px; color:red;">লোড করতে ব্যর্থ!</div>';
+            }
+        }
+
+        async function openAdminChatWithUser(uid, name) {
+            adminActiveChatUserId = uid;
+            document.getElementById('adminSupportChatListView').style.display = 'none';
+            document.getElementById('adminSupportSingleChatView').style.display = 'block';
+
+            document.getElementById('adminChatCurrentUserName').innerText = name;
+            document.getElementById('adminChatCurrentUserId').innerText = "ID: " + uid;
+
+            fetch(`${FIREBASE_DB_URL}support_chats/${uid}/meta.json`, {
+                method: 'PATCH',
+                body: JSON.stringify({ hasUnreadForAdmin: false })
+            }).catch(e => console.log(e));
+
+            await loadAdminActiveMessages();
+
+            if (adminChatPollTimer) clearInterval(adminChatPollTimer);
+            adminChatPollTimer = setInterval(loadAdminActiveMessages, 3500);
+        }
+
+        function backToAdminSupportList() {
+            if (adminChatPollTimer) clearInterval(adminChatPollTimer);
+            adminActiveChatUserId = null;
+            document.getElementById('adminSupportSingleChatView').style.display = 'none';
+            document.getElementById('adminSupportChatListView').style.display = 'block';
+            loadAdminSupportChats();
+        }
+
+        async function loadAdminActiveMessages() {
+            if (!adminActiveChatUserId) return;
+            try {
+                const res = await fetch(`${FIREBASE_DB_URL}support_chats/${adminActiveChatUserId}/messages.json`);
+                const msgs = await res.json();
+                const box = document.getElementById('adminChatMessagesBox');
+
+                if (!msgs) {
+                    box.innerHTML = '<div style="text-align:center; padding:20px; font-size:11px; color:var(--text-muted);">কোনো মেসেজ নেই।</div>';
+                    return;
+                }
+
+                let html = '';
+                Object.keys(msgs).forEach(mKey => {
+                    const m = msgs[mKey];
+                    const isAdmin = m.sender === 'admin';
+                    html += `
+                        <div class="chat-bubble ${isAdmin ? 'chat-bubble-user' : 'chat-bubble-admin'}" style="${isAdmin ? 'align-self:flex-end;' : 'align-self:flex-start;'}">
+                            <div style="font-size:9px; font-weight:800; opacity:0.8; margin-bottom:2px;">
+                                ${isAdmin ? '🛡️ আপনি (Admin)' : 'ইউজার'}
+                            </div>
+                            <div>${m.text}</div>
+                            <div class="chat-time">${m.time || ''}</div>
+                        </div>
+                    `;
+                });
+
+                box.innerHTML = html;
+                box.scrollTop = box.scrollHeight;
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        async function sendAdminReply() {
+            const input = document.getElementById('adminReplyInput');
+            const msg = input.value.trim();
+            if (!msg || !adminActiveChatUserId) return;
+
+            input.value = '';
+            const timestamp = Date.now();
+            const timeStr = new Date().toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' });
+
+            const newMsg = {
+                sender: 'admin',
+                text: msg,
+                time: timeStr,
+                timestamp: timestamp
+            };
+
+            try {
+                await fetch(`${FIREBASE_DB_URL}support_chats/${adminActiveChatUserId}/messages.json`, {
+                    method: 'POST',
+                    body: JSON.stringify(newMsg)
+                });
+
+                await fetch(`${FIREBASE_DB_URL}support_chats/${adminActiveChatUserId}/meta.json`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({
+                        lastMessage: "Admin: " + msg,
+                        lastTime: timeStr,
+                        timestamp: timestamp,
+                        hasUnreadForUser: true
+                    })
+                });
+
+                loadAdminActiveMessages();
+            } catch (err) {
+                showToast("❌ রিপ্লাই পাঠানো ব্যর্থ!");
+            }
         }
 
         function showToast(msg) {
